@@ -34,7 +34,7 @@ Now we need to install `Chromium,` via `puppeteer`, which is a version of the Ch
 
 # **Running WagScraper**
 1. Open a command prompt and navigate to the folder in which you cloned WagScraper (it should be `C:\[foo]\WagScraper`)
-2. Type `node index.js` and hit enter
+2. Type `node wagScraper.js` and hit enter
 3. A small Chrome like browser will pop up and automatically begin checking the wagyuswap website and filling in an Excel sheet every 2 minutes until the browser is closed or the process is terminated.
 4. Make sure not to mess with or close out of the browser or command prompt to keep the WagScraper running.
 
@@ -45,7 +45,7 @@ Simply copy your excel sheet into the folder you cloned WagScraper and rename it
 By default, WagScraper scrapes the wagyuswap website every 2 minutes and does so until the process is terminated, or the Chromium browser is closed.
 
 To change this:
-1. Open `index.js` in the WagScraper folder
+1. Open `wagScraper.js` in the WagScraper folder
 2. `PATH_TO_EXCEL_SHEET` is the path and name of the Excel Sheet WagScraper saves to
 3. `DELAY_BETWEEN_READING_VALUES_SECONDS` is the amount of time, in seconds, WagScraper waits to scrape the website and add a new row of values to the excel sheet (Defaults to 2 minutes)
 4. `TIME_OUT_AFTER_SECONDS` is how long, in seconds, WagScraper will spend scraping data. (Default is *Infinity* meaning it only terminates when you terminate the process or close the Chromium browser)
