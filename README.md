@@ -1,2 +1,2 @@
-# WagScraper
-Scrape WagPrice and LP Tokens to a CSV
+# even-more-money
+Money 2
