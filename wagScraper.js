@@ -5,7 +5,7 @@ import * as fs from 'fs';
 
 var SEED_PHRASE = ""; //Importing Seed Phrase for Wallet from text file in same dir
 var PATH_TO_EXCEL_SHEET = "./excelSheet.xlsx";
-var DELAY_BETWEEN_READING_VALUES_SECONDS = 0.5*60; // 1 minute delay between reading values into the excel spreadsheet
+var DELAY_BETWEEN_READING_VALUES_SECONDS = 2*60; // 2 minute delay between reading values into the excel spreadsheet
 var TIME_OUT_AFTER_SECONDS = Infinity; //Infinity means this program will run for Infinity seconds, namely you'll have to manually terminate the process to stop it
 
 //Reading in Seed Phrase to import wallet
@@ -60,18 +60,19 @@ async function main() {
   //Create Excel Sheet
   let workbook = new Excel.Workbook();
   let worksheet;
-
   if(fs.existsSync(PATH_TO_EXCEL_SHEET)){
     await workbook.xlsx.readFile(PATH_TO_EXCEL_SHEET);
     worksheet = workbook.worksheets[0];
   }
-  
   else{
     worksheet = workbook.addWorksheet("WAG Spreadsheet");
     worksheet.addRow(["Date", "Time", "WAG Price", "LPTokenQuant", "LP Val", "% of Pool", "Liquidity"]);
   }
+
+
+  //Loop To Grab values needed for spreadsheet
   let timeAlive = 0;
-  while(timeAlive < TIME_OUT_AFTER_SECONDS * 1000){    //Grab values needed for spreadsheet
+  while(timeAlive < TIME_OUT_AFTER_SECONDS * 1000){
     let timeStart = new Date();
     await page.click('#root > div.sc-fmdNqN.hyACbC > nav > div:nth-child(1) > div.sc-jSFjdj.sc-gKAaRy.kJmatq.jcNvwq > button > svg');
     await page.waitForSelector('#root > div.sc-fmdNqN.hyACbC > div > div.sc-eEVmNe.kYTqSi > div.sc-fXgAZx.iTGMnc > div > a > div');
@@ -110,4 +111,4 @@ async function main() {
   //Close Out of Browser
   await browser.close();
 }
-main(SEED_PHRASE);
+main(SEED_PHRASE); //Actual call to run above async func
