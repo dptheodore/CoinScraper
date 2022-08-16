@@ -6,6 +6,9 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
+#Private Key for Saucer Swap
+privateKey.json
+
 #Excel Sheets that just track price data
 *.xlsx
 
