@@ -88,7 +88,6 @@ export async function setupWallet(browser, page, data){
   return newPage;
 }
 
-
 export async function scrapeData(page, workbook, worksheet){
     let timeStart = new Date();
 
@@ -135,7 +134,6 @@ export async function scrapeData(page, workbook, worksheet){
     await workbook.xlsx.writeFile(cons.PATH_TO_EXCEL_SHEET);
 }
 
-
 export async function checkEarnings(page){
     let sauceEarnElem = await page.$(cons.HBARUSDCHeaderSelector + "> div.MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-4.MuiGrid-grid-sm-3.css-1wxaqej > div > div.MuiGrid-root.MuiGrid-container.css-v3z1wi > span");
     let sauceEarnTxt  = await page.evaluate(el => el.textContent, sauceEarnElem);
@@ -146,7 +144,17 @@ export async function checkEarnings(page){
     return parseFloat(sauceEarnTxt.substr(1)) + parseFloat(hbarEarnTxt.substr(1));
 }
 
+export async function clickSelector(page,selector){
+    await page.click(selector);
+    await new Promise(resolve => setTimeout(resolve, cons.DELAY_BETWEEN_CLICKS_SECONDS * 1000));
+}
 
-export async function harvestEarnings(page){
-    console.log("HEY");
+export async function harvestEarnings(page, extPg){
+    await clickSelector(page, cons.HBARUSDCContentSelector + " > div > div > div.MuiGrid-root.MuiGrid-container.MuiGrid-item.MuiGrid-grid-xs-12.MuiGrid-grid-sm-4.css-tf5444 > div > button.MuiButton-root.MuiButton-outlined.MuiButton-outlinedPrimary.MuiButton-sizeMedium.MuiButton-outlinedSizeMedium.MuiButton-fullWidth.MuiButtonBase-root.css-701jtl")
+    await extPg.bringToFront();
+    await clickSelector(extPg,"body > dialog-popup-wrapper > div > div > div.button-holder.ng-tns-c55-12 > div > button.ed-btn.ed-btn-lg.ng-tns-c55-12.ed-btn-success.ng-star-inserted");
+    await extPg.waitForSelector("body > dialog-popup-wrapper > div > div > div.content-holder.ng-tns-c55-12 > div > hashconnect-transaction > sending-spinner > div > div > div > button");
+    await clickSelector(extPg,"body > dialog-popup-wrapper > div > div > div.content-holder.ng-tns-c55-12 > div > hashconnect-transaction > sending-spinner > div > div > div > button");
+    await page.bringToFront();
+    await clickSelector(page,"#scroll-dialog-title > button");
 }

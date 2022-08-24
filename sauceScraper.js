@@ -51,18 +51,29 @@ async function main() {
 
   let extPg = await hps.setupWallet(browser,page, data);
 
-  //Click HBAR USDC tab to get all content needed
-  await page.click("#__next > div > div.MuiBox-root.css-zf0iqh > div.MuiContainer-root.css-nkatz7 > div > div > div.MuiBox-root.css-tw4vmx > div > div > div > div:nth-child(10)");
-  await new Promise(resolve => setTimeout(resolve, cons.DELAY_BETWEEN_CLICKS_SECONDS * 1000));
+  
+  let sortSelectorBtn = "#__next > div > div.MuiBox-root.css-zf0iqh > div.MuiContainer-root.css-nkatz7 > div > div > div.MuiBox-root.css-tw4vmx > div > div > div > div.MuiGrid-root.MuiGrid-container.css-1e2x7iq > div > div.MuiGrid-root.MuiGrid-container.MuiGrid-item.MuiGrid-grid-xs-4.MuiGrid-grid-sm-3.css-7jkkkb > div"
+  //This sorts to have the top most div to be the one that has the reward money 
+  await hps.clickSelector(page,sortSelectorBtn);
+  await hps.clickSelector(page,sortSelectorBtn);
+
+  //Click Top Earnings div to get all content needed
+  let topEarningsBtn = "#__next > div > div.MuiBox-root.css-zf0iqh > div.MuiContainer-root.css-nkatz7 > div > div > div.MuiBox-root.css-tw4vmx > div > div > div > div:nth-child(4)";
+  await hps.clickSelector(page,topEarningsBtn)
+
+
 
   //Loop through collecting values and adding to spreadsheet
   let timeAlive = 0;
   while(timeAlive < cons.TIME_OUT_AFTER_SECONDS * 1000){
     await page.bringToFront();
     
+    //Scrape Data to Spreadsheet
     await hps.scrapeData(page, workbook, worksheet);
+
+    //Auto Harvest if over the threshold
     let hbarUSDCEarn = await hps.checkEarnings(page);
-    if (hbarUSDCEarn >= 0) await hps.harvestEarnings(page);
+    if (hbarUSDCEarn >= cons.MIN_HARVEST_AMT_DOLLARS) await hps.harvestEarnings(page, extPg);
 
     await new Promise(resolve => setTimeout(resolve, cons.DELAY_BETWEEN_READING_VALUES_SECONDS * 1000));
     timeAlive += new Date() - timeStart;
