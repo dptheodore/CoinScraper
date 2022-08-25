@@ -57,7 +57,12 @@ async function main() {
   await hps.clickSelector(page,sortSelectorBtn);
   await hps.clickSelector(page,sortSelectorBtn);
 
+  await page.type("#__next > div > div.MuiBox-root.css-zf0iqh > div.MuiContainer-root.css-nkatz7 > div > div > div.MuiBox-root.css-tw4vmx > div > div > div > div.MuiBox-root.css-0 > div.MuiBox-root.css-gg4vpm > div.MuiFormControl-root.MuiTextField-root.css-i44wyl > div > input", "USDC");
+  await new Promise(resolve => setTimeout(resolve, cons.DELAY_BETWEEN_CLICKS_SECONDS * 1000));
+
   //Click Top Earnings div to get all content needed
+
+
   let topEarningsBtn = "#__next > div > div.MuiBox-root.css-zf0iqh > div.MuiContainer-root.css-nkatz7 > div > div > div.MuiBox-root.css-tw4vmx > div > div > div > div:nth-child(4)";
   await hps.clickSelector(page,topEarningsBtn)
 
