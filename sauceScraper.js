@@ -49,36 +49,42 @@ async function main() {
   const page = await browser.newPage();
   await page.goto(url, { waitUntil: 'load' });
 
+  console.log("Initializing Hashpack Wallet setup w/ your credentials...");
   let extPg = await hps.setupWallet(browser,page, data);
+  console.log("Hashpack Wallet setup successful!");
 
   
+  console.log("Sorting Farm data before scraping and auto-harvesting...")
   let sortSelectorBtn = "#__next > div > div.MuiBox-root.css-zf0iqh > div.MuiContainer-root.css-nkatz7 > div > div > div.MuiBox-root.css-tw4vmx > div > div > div > div.MuiGrid-root.MuiGrid-container.css-1e2x7iq > div > div.MuiGrid-root.MuiGrid-container.MuiGrid-item.MuiGrid-grid-xs-4.MuiGrid-grid-sm-3.css-7jkkkb > div"
   //This sorts to have the top most div to be the one that has the reward money 
-  await hps.clickSelector(page,sortSelectorBtn);
-  await hps.clickSelector(page,sortSelectorBtn);
+  await hps.domManipSleep(()=>page.click(sortSelectorBtn));
+  await hps.domManipSleep(()=>page.click(sortSelectorBtn));
 
-  await page.type("#__next > div > div.MuiBox-root.css-zf0iqh > div.MuiContainer-root.css-nkatz7 > div > div > div.MuiBox-root.css-tw4vmx > div > div > div > div.MuiBox-root.css-0 > div.MuiBox-root.css-gg4vpm > div.MuiFormControl-root.MuiTextField-root.css-i44wyl > div > input", "USDC");
-  await new Promise(resolve => setTimeout(resolve, cons.DELAY_BETWEEN_CLICKS_SECONDS * 1000));
+  //Type in USDC into the search bar as this will only give us USDC - X pairs
+  await hps.domManipSleep(()=>page.type("#__next > div > div.MuiBox-root.css-zf0iqh > div.MuiContainer-root.css-nkatz7 > div > div > div.MuiBox-root.css-tw4vmx > div > div > div > div.MuiBox-root.css-0 > div.MuiBox-root.css-gg4vpm > div.MuiFormControl-root.MuiTextField-root.css-i44wyl > div > input", "USDC"));
 
-  //Click Top Earnings div to get all content needed
-
-
+  //Click Top Earnings div to get all content needed which will always be the 4th child
   let topEarningsBtn = "#__next > div > div.MuiBox-root.css-zf0iqh > div.MuiContainer-root.css-nkatz7 > div > div > div.MuiBox-root.css-tw4vmx > div > div > div > div:nth-child(4)";
-  await hps.clickSelector(page,topEarningsBtn)
-
-
+  await hps.domManipSleep(()=>page.click(topEarningsBtn));
+  console.log("Farm sort successful!");
 
   //Loop through collecting values and adding to spreadsheet
   let timeAlive = 0;
   while(timeAlive < cons.TIME_OUT_AFTER_SECONDS * 1000){
     await page.bringToFront();
     
+    console.log("Scraping data to excel sheet...");
     //Scrape Data to Spreadsheet
     await hps.scrapeData(page, workbook, worksheet);
+    console.log("Data scrape successful!");
 
     //Auto Harvest if over the threshold
     let hbarUSDCEarn = await hps.checkEarnings(page);
-    if (hbarUSDCEarn >= cons.MIN_HARVEST_AMT_DOLLARS) await hps.harvestEarnings(page, extPg);
+    if (hbarUSDCEarn >= cons.MIN_HARVEST_AMT_DOLLARS) {
+      console.log("Harvesting Rewards..."); 
+      await hps.harvestEarnings(page, extPg); 
+      console.log("Harvest successful!");
+    }
 
     await new Promise(resolve => setTimeout(resolve, cons.DELAY_BETWEEN_READING_VALUES_SECONDS * 1000));
     timeAlive += new Date() - timeStart;
