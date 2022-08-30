@@ -8,7 +8,7 @@ export async function createExcelSheet(pairStr){
     let pairArr = pairStr.split("-");
     let workbook = new Excel.Workbook();
     let worksheet;
-    let xlsxPath = cons.PATH_TO_EXCEL_SHEET+pairArr[0]+pairArr[1]+".xlsx";
+    let xlsxPath = cons.PATH_TO_EXCEL_SHEET+pairStr+".xlsx";
     if(fs.existsSync(xlsxPath)) {
       await workbook.xlsx.readFile(xlsxPath);
       worksheet = workbook.worksheets[0];
