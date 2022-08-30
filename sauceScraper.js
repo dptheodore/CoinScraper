@@ -5,8 +5,10 @@ import * as cons from "./constants.js";
 import path from "path";
 
 async function main() {
+
   var data = ""; //Importing Seed Phrase for Wallet from json file in same dir
-    
+  const PATH_TO_HASHPACK_EXT = "./hashPack/";
+
   //Reading in Seed Phrase to import wallet
   fs.readFile('privateKey.txt', (err,fileData) => {
     if (!err) data = JSON.parse(fileData);
