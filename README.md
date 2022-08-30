@@ -12,7 +12,7 @@
 
 ### Installing Node Modules in the CoinScraper repository
 
-1. Open a command prompt and navigate to where you cloned the CoinScraper repository, if you've been following the installation instructions so far that should be `C:\[foo]\CoinScraper`
+1. Open a command prompt and navigate to where you cloned the CoinScraper repository, if you've been following the installation instructions so far that should be `C:\Users\[YOUR_USER_NAME]\Documents\CoinScraper` ****NOTE: For this document, we'll use `[foo]` interchangably with `Users\[YOUR_USER_NAME]\Documents`****
 2. Type `npm install` which will automatically download and install all node modules necessary to run the scrapers.
 
 ### Installing Chromium
