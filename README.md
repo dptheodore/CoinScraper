@@ -52,7 +52,7 @@ The following instructions are required for using the **SauceScraper**
 11. Save `privateKey.txt` and close the file.
 12. ****NOTE:**** As long as you named the file exactly `privateKey.txt` this file will stay local and your sensitive wallet data won't be tracked, but do not share this text file with anyone.
 
-## **Running SauceScraper**
+# **Running SauceScraper**
 1. Open a command prompt and navigate to the folder in which you cloned SauceScraper (it should be `C:\[foo]\CoinScraper`)
 2. Type `node sauceScraper.js` and hit enter
 3. A small Chrome like browser will pop up and automatically begin checking the saucerswap website and scraping data and auto-harvesting every 2 minutes until the browser is closed or the process is terminated.
