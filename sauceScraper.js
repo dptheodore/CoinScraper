@@ -8,7 +8,7 @@ async function main() {
   var data = ""; //Importing Seed Phrase for Wallet from json file in same dir
     
   //Reading in Seed Phrase to import wallet
-  fs.readFile('privateKey.json', (err,fileData) => {
+  fs.readFile('privateKey.txt', (err,fileData) => {
     if (!err) data = JSON.parse(fileData);
   });
 
