@@ -23,8 +23,8 @@ async function main() {
   let sheetArr = [];
   let xlsxPathArr = [];
   //Create Excel Sheet for each pair in user-def'd array
-  for(let i = 0; i < cons.PAIRS_TO_SCRAPE.length; i++){
-    let pair = cons.PAIRS_TO_SCRAPE[i];
+  for(let i = 0; i < cons.PAIRS_TO_SCRAPE_HARVEST.length; i++){
+    let pair = cons.PAIRS_TO_SCRAPE_HARVEST[i];
     let excelFiles = await hps.createExcelSheet(pair);
     bookArr.push(excelFiles[0]);
     sheetArr.push(excelFiles[1]);
@@ -33,7 +33,7 @@ async function main() {
 
 
   //Launch Automated Browser Window
-  var absPath = path.resolve(cons.PATH_TO_HASHPACK_EXT);
+  var absPath = path.resolve(PATH_TO_HASHPACK_EXT);
   const browser = await puppeteer.launch({
     headless:false,
     args:[
@@ -68,8 +68,8 @@ async function main() {
   let timeStart = 0;
   //Loop through collecting values and adding to spreadsheet
   while(timeAlive < cons.TIME_OUT_AFTER_SECONDS * 1000){
-    for(let i = 0; i < cons.PAIRS_TO_SCRAPE.length; i++){
-      let pair = cons.PAIRS_TO_SCRAPE[i];
+    for(let i = 0; i < cons.PAIRS_TO_SCRAPE_HARVEST.length; i++){
+      let pair = cons.PAIRS_TO_SCRAPE_HARVEST[i];
       let pairArr = pair.split("-");
 
       //Type in one of the tokens into the search bar as this will only give us pairs with that token

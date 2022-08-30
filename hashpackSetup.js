@@ -90,9 +90,6 @@ export async function setupWallet(browser, page, data){
 }
 
 export async function scrapeData(page, workbook, worksheet, xlsxPath, timeStart){
-    //HBAR Price
-    let hbarPriceElem = await page.$("#__next > div > div.MuiBox-root.css-zf0iqh > header > div > div > div:nth-child(2) > div > div > a > div");
-    let hbarPriceTxt  = await page.evaluate(el => el.textContent, hbarPriceElem);
 
     //Get APR 
     let aprElem = await page.$(sels.farmPairHeaderSelector + " > div.MuiGrid-root.MuiGrid-container.MuiGrid-item.MuiGrid-grid-xs-4.MuiGrid-grid-sm-2.css-zsyyq7 > p > p");
@@ -111,15 +108,30 @@ export async function scrapeData(page, workbook, worksheet, xlsxPath, timeStart)
     let lpQuantElem = await page.$(sels.farmPairContentSelector + " > div > div > div.MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-12.MuiGrid-grid-sm-8.css-1fahd83 > div:nth-child(3) > p");
     let lpQuantTxt = await page.evaluate(el => el.textContent, lpQuantElem);
 
-    //Get HBAR Token Quant
-    let hbarQuantElem = await page.$(sels.farmPairContentSelector + " > div > div > div.MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-12.MuiGrid-grid-sm-8.css-1fahd83 > div:nth-child(5) > p");
-    let hbarQuantTxt = await page.evaluate(el => el.textContent, hbarQuantElem);
+    //Get Token 1 Quant
+    let t1QuantElem = await page.$(sels.farmPairContentSelector + " > div > div > div.MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-12.MuiGrid-grid-sm-8.css-1fahd83 > div:nth-child(5) > p");
+    let t1QuantTxt = await page.evaluate(el => el.textContent, t1QuantElem);
 
-    //USDC Token Quant
-    let usdcQuantElem = await page.$(sels.farmPairContentSelector + " > div > div > div.MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-12.MuiGrid-grid-sm-8.css-1fahd83 > div:nth-child(6) > p:nth-child(2)");
-    let usdcQuantTxt = await page.evaluate(el => el.textContent, usdcQuantElem);
+    //Get Token 2 Quant
+    let t2QuantElem = await page.$(sels.farmPairContentSelector + " > div > div > div.MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-12.MuiGrid-grid-sm-8.css-1fahd83 > div:nth-child(6) > p:nth-child(2)");
+    let t2QuantTxt = await page.evaluate(el => el.textContent, t2QuantElem);
 
-    let usdcPrice = (parseFloat(hbarPriceTxt) * parseFloat(hbarQuantTxt) / parseFloat(usdcQuantTxt)).toFixed(3);
+    //Replacing commas with decimals because parseFloat expects no commas
+    let valNum = valTxt.substring(1).replace(/,/g,"");
+    let t1QuantNum = t1QuantTxt.replace(/,/g,"");
+    let t2QuantNum = t2QuantTxt.replace(/,/g,"");
+
+    //Token 1 Price
+    let t1PriceTxt = parseFloat( (parseFloat(valNum)/2) / parseFloat(t1QuantNum)).toFixed(6);
+
+    //Token 2 Price
+    let t2PriceTxt = parseFloat( (parseFloat(valNum)/2) / parseFloat(t2QuantNum)).toFixed(6);
+
+    console.log(parseFloat(valNum));
+    console.log(parseFloat(t1QuantNum));
+    console.log(parseFloat(t2QuantNum));
+    console.log(t1PriceTxt);
+    console.log(t2PriceTxt);
 
     //Get Date
     var currentDate = new Date();
@@ -129,7 +141,7 @@ export async function scrapeData(page, workbook, worksheet, xlsxPath, timeStart)
     var time = currentDate.getHours() + ":" + currentDate.getMinutes().toLocaleString("en-US", {minimumIntegerDigits:2}); 
 
     //Add Values to Spreadsheet
-    worksheet.addRow([date, time, hbarPriceTxt, usdcPrice, aprTxt, hbarQuantTxt, usdcQuantTxt, lpQuantTxt, valTxt, liqTxt]).commit();
+    worksheet.addRow([date, time, t1PriceTxt, t2PriceTxt, aprTxt, t1QuantTxt, t2QuantTxt, lpQuantTxt, valTxt, liqTxt]).commit();
     await workbook.xlsx.writeFile(xlsxPath);
 }
 
