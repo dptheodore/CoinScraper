@@ -127,12 +127,6 @@ export async function scrapeData(page, workbook, worksheet, xlsxPath, timeStart)
     //Token 2 Price
     let t2PriceTxt = parseFloat( (parseFloat(valNum)/2) / parseFloat(t2QuantNum)).toFixed(6);
 
-    console.log(parseFloat(valNum));
-    console.log(parseFloat(t1QuantNum));
-    console.log(parseFloat(t2QuantNum));
-    console.log(t1PriceTxt);
-    console.log(t2PriceTxt);
-
     //Get Date
     var currentDate = new Date();
     var date = currentDate.getMonth()+1 + "/" + currentDate.getDate() + "/" + currentDate.getFullYear();
